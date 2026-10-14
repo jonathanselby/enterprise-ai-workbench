@@ -18,7 +18,9 @@ jobs:
       - run: ./workbench validate
       - run: ./workbench list
       - run: ./workbench render -workflow research-to-decision -input workflows/research-to-decision/example-input.md -out /tmp/run.md
-      - run: grep -F '"workflow_id": "research-to-decision"' /tmp/run.md
+      - name: Verify rendered workflow identity
+        run: |
+          grep -F '"workflow_id": "research-to-decision"' /tmp/run.md
       - name: Check every example output
         run: |
           for d in workflows/*; do
@@ -26,4 +28,6 @@ jobs:
             id="$(basename "$d")"
             ./workbench check -workflow "$id" -output "$d/example-output.md"
           done
-      - run: ./workbench review -workflow unknowns-first -input workflows/unknowns-first/example-input.md -output workflows/unknowns-first/example-output.md -decision accepted -reviewer CI -reason 'example acceptance test' | grep -F '"decision": "accepted"'
+      - name: Record example acceptance
+        run: |
+          ./workbench review -workflow unknowns-first -input workflows/unknowns-first/example-input.md -output workflows/unknowns-first/example-output.md -decision accepted -reviewer CI -reason 'example acceptance test' | grep -F '"decision": "accepted"'
