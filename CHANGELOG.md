@@ -14,4 +14,4 @@ Initial usable release.
 - fictional worked examples for every workflow;
 - methods for intent, human review and accepted useful work;
 - Go CLI using standard library only;
-- unit and acceptance tests in GitHub Actions.
+- unit and acceptance tests in GitHub Actions, including every bundled example.
