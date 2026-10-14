@@ -1,0 +1,2 @@
+# Remote access policy extract
+Employees must use multi-factor authentication when accessing corporate systems from outside a company office. Privileged administrators must use a company-managed device for remote administration. Contractors should use company-managed devices where one has been issued. Temporary exceptions may be approved by the Head of Security for up to seven calendar days and must be recorded in the security exception register.

@@ -1,0 +1,2 @@
+# Vendor proposal extract
+CloudFox describes its workflow platform as "enterprise grade" and says customers can export all workflow definitions as JSON. Execution history can be retained for 30, 90 or 365 days depending on plan. Private networking is available only on the Enterprise tier. The proposal includes an API rate limit of 600 calls per minute and states that higher limits are "available by arrangement". The vendor supplied a SOC 2 Type II report dated 14 months ago. No exit assistance is priced in the proposal.

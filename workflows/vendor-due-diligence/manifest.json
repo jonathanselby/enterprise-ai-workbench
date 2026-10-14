@@ -1,0 +1,9 @@
+{
+  "id": "vendor-due-diligence",
+  "version": "1.0.0",
+  "title": "Vendor Due Diligence",
+  "purpose": "Separate vendor claims from evidence, assumptions, dependencies, lock-in, operational impact and questions to test.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Claims", "Evidence", "Assumptions", "Dependencies", "Lock-in and exit", "Operational impact", "Questions to test", "Decision notes"]
+}

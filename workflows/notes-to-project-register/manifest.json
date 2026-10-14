@@ -1,0 +1,9 @@
+{
+  "id": "notes-to-project-register",
+  "version": "1.0.0",
+  "title": "Notes to Project Register",
+  "purpose": "Turn unstructured project material into a deliberately small operational register without inventing status or ownership.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Project Register", "Decisions", "Unknowns"]
+}

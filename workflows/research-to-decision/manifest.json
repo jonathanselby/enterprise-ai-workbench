@@ -1,0 +1,19 @@
+{
+  "id": "research-to-decision",
+  "version": "1.0.0",
+  "title": "Research to Decision",
+  "purpose": "Turn a broad research question into evidence, contradictions, unknowns, options and a defensible decision brief.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": [
+    "Question",
+    "What the evidence supports",
+    "What the evidence does not support",
+    "Contradictions",
+    "Unknowns",
+    "Options",
+    "Decision criteria",
+    "Recommended decision",
+    "What would change the decision"
+  ]
+}

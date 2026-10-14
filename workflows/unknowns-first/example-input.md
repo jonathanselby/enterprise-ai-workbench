@@ -1,0 +1,2 @@
+# Migration status notes
+The programme dashboard says 82% of applications are migrated. The finance pack says 61 of 95 applications have completed migration. The dashboard footnote says applications count as migrated once production traffic begins. The finance pack counts migration complete only after the legacy service is decommissioned. Twelve applications are running production traffic on the new platform while their legacy services remain active. The remaining application inventory was last reconciled four months ago.

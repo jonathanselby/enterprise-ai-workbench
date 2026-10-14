@@ -1,0 +1,2 @@
+# Service transition extract
+The new rostering service will rely on a single identity connector during the first release. The vendor has tested failure recovery in its staging environment but the customer has not run a production-like failover exercise. Manual roster entry remains available at each site. The operating procedure says local managers can use manual entry for up to four hours. Payroll cut-off is 3pm each Friday.

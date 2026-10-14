@@ -1,0 +1,29 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+      - run: go test ./...
+      - run: go build -o workbench ./cmd/workbench
+      - run: ./workbench version | grep -Fx '0.1.0'
+      - run: ./workbench validate
+      - run: ./workbench list
+      - run: ./workbench render -workflow research-to-decision -input workflows/research-to-decision/example-input.md -out /tmp/run.md
+      - run: grep -F '"workflow_id": "research-to-decision"' /tmp/run.md
+      - name: Check every example output
+        run: |
+          for d in workflows/*; do
+            [ -d "$d" ] || continue
+            id="$(basename "$d")"
+            ./workbench check -workflow "$id" -output "$d/example-output.md"
+          done
+      - run: ./workbench review -workflow unknowns-first -input workflows/unknowns-first/example-input.md -output workflows/unknowns-first/example-output.md -decision accepted -reviewer CI -reason 'example acceptance test' | grep -F '"decision": "accepted"'

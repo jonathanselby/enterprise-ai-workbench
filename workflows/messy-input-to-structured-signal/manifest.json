@@ -1,0 +1,9 @@
+{
+  "id": "messy-input-to-structured-signal",
+  "version": "1.0.0",
+  "title": "Messy Input to Structured Signal",
+  "purpose": "Turn mixed, uneven enterprise material into a traceable structure without pretending the source is cleaner than it is.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Objective", "Source inventory", "Supported facts", "Candidate structure", "Uncertainty", "Actions and owners", "Review"]
+}

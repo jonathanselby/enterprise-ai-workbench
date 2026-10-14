@@ -1,0 +1,9 @@
+{
+  "id": "unknowns-first",
+  "version": "1.0.0",
+  "title": "Unknowns First",
+  "purpose": "Force analysis to distinguish known facts from inference, assumptions, contradictions and missing evidence.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Known", "Inferred", "Assumed", "Contradictory", "Unknown"]
+}

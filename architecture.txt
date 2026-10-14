@@ -1,0 +1,36 @@
+ENTERPRISE AI WORKBENCH
+=======================
+
+MESSY ENTERPRISE INPUT
+        |
+        v
+VERSIONED WORKFLOW (manifest + SKILL.md)
+        |
+        v
+WORKBENCH RENDER
+  - workflow version
+  - skill SHA-256
+  - input SHA-256
+  - required sections
+  - authority boundary
+        |
+        v
+PROVIDER-NEUTRAL BUNDLE
+        |
+        v
+EXTERNAL MODEL / LLM / THREE-LANE MODEL HARNESS
+        |
+        v
+MODEL OUTPUT
+        |
+        +--> WORKBENCH CHECK (structure only)
+        |
+        v
+HUMAN / NAMED DETERMINISTIC REVIEW
+        |
+        v
+WORKBENCH REVIEW RECORD
+
+Boundary
+--------
+The model analyses and proposes. The workbench makes method, provenance and output contracts explicit. A human or named deterministic control remains authoritative for acceptance.

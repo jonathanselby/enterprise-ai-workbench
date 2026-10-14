@@ -1,0 +1,9 @@
+{
+  "id": "documents-to-risks",
+  "version": "1.0.0",
+  "title": "Documents to Risks",
+  "purpose": "Extract candidate risks from documents and express them as cause, event and consequence for human review.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Candidate Risks", "Evidence", "Existing controls", "Unknowns", "Review notes"]
+}

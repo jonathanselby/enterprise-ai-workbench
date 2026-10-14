@@ -1,0 +1,9 @@
+{
+  "id": "policy-to-obligations",
+  "version": "1.0.0",
+  "title": "Policy to Obligations",
+  "purpose": "Extract normative statements, owners, triggers, evidence requirements, exceptions and ambiguity from policy text.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": ["Obligations", "Ambiguities", "Exceptions", "Unknowns", "Review notes"]
+}

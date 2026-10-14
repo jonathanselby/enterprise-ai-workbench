@@ -1,0 +1,16 @@
+{
+  "id": "meeting-to-decisions",
+  "version": "1.0.0",
+  "title": "Meeting to Decisions",
+  "purpose": "Separate what a meeting actually decided from actions, assumptions, disagreements, deferrals and unknowns.",
+  "authority": "human",
+  "skill": "SKILL.md",
+  "required_output_sections": [
+    "Decisions",
+    "Actions",
+    "Assumptions",
+    "Disagreements",
+    "Deferred",
+    "Unknown"
+  ]
+}
