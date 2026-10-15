@@ -1,5 +1,7 @@
 # Enterprise AI Workbench
 
+[![test](https://github.com/jonathanselby/enterprise-ai-workbench/actions/workflows/test.yml/badge.svg)](https://github.com/jonathanselby/enterprise-ai-workbench/actions/workflows/test.yml)
+
 **Small, reusable AI workflows for turning messy enterprise information into decisions, registers, briefs and technical artefacts.**
 
 Enterprise AI work is usually messier than the software demo. The hard part is often not getting a model to produce prose; it is making evidence, assumptions, contradictions, ownership, uncertainty and acceptance visible enough that somebody else can rely on the work.
@@ -27,7 +29,7 @@ Every workflow contains its own README, `manifest.json`, `SKILL.md`, fictional e
 
 ## Install
 
-Requires Go 1.23+.
+Requires Go 1.26+.
 
 ```bash
 go install github.com/jonathanselby/enterprise-ai-workbench/cmd/workbench@latest
