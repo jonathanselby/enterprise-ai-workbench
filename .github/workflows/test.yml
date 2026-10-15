@@ -11,8 +11,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.23.x'
-      - run: go test ./...
+          go-version: '1.26.x'
+      - run: go vet ./...
+      - run: go test -race ./...
       - run: go build -o workbench ./cmd/workbench
       - run: ./workbench version | grep -Fx '0.1.0'
       - run: ./workbench validate
