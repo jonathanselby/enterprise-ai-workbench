@@ -1,3 +1,3 @@
 module github.com/jonathanselby/enterprise-ai-workbench
 
-go 1.23
+go 1.26
