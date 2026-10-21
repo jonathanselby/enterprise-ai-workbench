@@ -4,19 +4,23 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 	"time"
 )
 
-func SHA256Text(s string) string {
-	sum := sha256.Sum256([]byte(s))
-	return hex.EncodeToString(sum[:])
-}
+var ErrOutputContract = errors.New("output contract failed")
+
+func SHA256Text(s string) string { sum := sha256.Sum256([]byte(s)); return hex.EncodeToString(sum[:]) }
 
 func RunID(m Manifest, skill, input string) string {
-	seed := m.ID + "\n" + m.Version + "\n" + SHA256Text(skill) + "\n" + SHA256Text(input)
+	contract, _ := json.Marshal(struct {
+		Authority string   `json:"authority"`
+		Sections  []string `json:"sections"`
+	}{m.Authority, m.RequiredOutputSections})
+	seed := m.ID + "\n" + m.Version + "\n" + SHA256Text(skill) + "\n" + SHA256Text(string(contract)) + "\n" + SHA256Text(input)
 	return "run-" + SHA256Text(seed)[:16]
 }
 
@@ -25,11 +29,7 @@ func Render(wf Workflow, input string) (string, error) {
 		return "", fmt.Errorf("workflow is invalid: %s", issues[0].Message)
 	}
 	m := wf.Manifest
-	meta := BundleMetadata{
-		RunID: RunID(m, wf.Skill, input), WorkflowID: m.ID, WorkflowVersion: m.Version,
-		Authority: m.Authority, SkillSHA256: SHA256Text(wf.Skill), InputSHA256: SHA256Text(input),
-		RequiredOutputSections: append([]string(nil), m.RequiredOutputSections...),
-	}
+	meta := BundleMetadata{RunID: RunID(m, wf.Skill, input), WorkflowID: m.ID, WorkflowVersion: m.Version, Authority: m.Authority, SkillSHA256: SHA256Text(wf.Skill), InputSHA256: SHA256Text(input), RequiredOutputSections: append([]string(nil), m.RequiredOutputSections...)}
 	metaJSON, _ := json.MarshalIndent(meta, "", "  ")
 	var b strings.Builder
 	b.WriteString("# Enterprise AI Workbench Run Bundle\n\n")
@@ -66,8 +66,24 @@ func CheckOutput(m Manifest, output string) ValidationResult {
 }
 
 func containsHeading(output, heading string) bool {
+	fence := ""
 	for _, line := range strings.Split(output, "\n") {
-		if strings.TrimSpace(line) == heading {
+		trimmed := strings.TrimSpace(line)
+		if fence != "" {
+			if strings.HasPrefix(trimmed, fence) {
+				fence = ""
+			}
+			continue
+		}
+		if strings.HasPrefix(trimmed, "```") {
+			fence = "```"
+			continue
+		}
+		if strings.HasPrefix(trimmed, "~~~") {
+			fence = "~~~"
+			continue
+		}
+		if trimmed == heading {
 			return true
 		}
 	}
@@ -87,16 +103,11 @@ func Review(wf Workflow, input, output, decision, reviewer, reason string, now t
 	}
 	if decision == "accepted" {
 		if result := CheckOutput(wf.Manifest, output); !result.Valid {
-			return ReviewRecord{}, fmt.Errorf("cannot accept output that fails output contract: %s", result.Issues[0].Path)
+			return ReviewRecord{}, fmt.Errorf("%w: missing %s", ErrOutputContract, result.Issues[0].Path)
 		}
 	}
-	return ReviewRecord{
-		RunID: RunID(wf.Manifest, wf.Skill, input), WorkflowID: wf.Manifest.ID, WorkflowVersion: wf.Manifest.Version,
-		Decision: decision, Reviewer: reviewer, Reason: reason, InputSHA256: SHA256Text(input),
-		OutputSHA256: SHA256Text(output), SkillSHA256: SHA256Text(wf.Skill), ReviewedAt: now.UTC(),
-	}, nil
+	return ReviewRecord{RunID: RunID(wf.Manifest, wf.Skill, input), WorkflowID: wf.Manifest.ID, WorkflowVersion: wf.Manifest.Version, Decision: decision, Reviewer: reviewer, Reason: reason, InputSHA256: SHA256Text(input), OutputSHA256: SHA256Text(output), SkillSHA256: SHA256Text(wf.Skill), ReviewedAt: now.UTC()}, nil
 }
-
 func ReadText(path string) (string, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {

@@ -10,8 +10,14 @@ import (
 )
 
 func LoadWorkflow(root, id string) (Workflow, error) {
-	dir := filepath.Join(root, id)
-	manifestPath := filepath.Join(dir, "manifest.json")
+	dir, err := containedPath(root, id)
+	if err != nil {
+		return Workflow{}, fmt.Errorf("workflow path: %w", err)
+	}
+	manifestPath, err := containedPath(dir, "manifest.json")
+	if err != nil {
+		return Workflow{}, fmt.Errorf("manifest path: %w", err)
+	}
 	b, err := os.ReadFile(manifestPath)
 	if err != nil {
 		return Workflow{}, fmt.Errorf("read manifest: %w", err)
@@ -24,11 +30,43 @@ func LoadWorkflow(root, id string) (Workflow, error) {
 	if strings.TrimSpace(skillName) == "" {
 		skillName = "SKILL.md"
 	}
-	skill, err := os.ReadFile(filepath.Join(dir, skillName))
+	skillPath, err := containedPath(dir, skillName)
+	if err != nil {
+		return Workflow{}, fmt.Errorf("skill path: %w", err)
+	}
+	skill, err := os.ReadFile(skillPath)
 	if err != nil {
 		return Workflow{}, fmt.Errorf("read skill: %w", err)
 	}
 	return Workflow{Dir: dir, Manifest: m, Skill: string(skill)}, nil
+}
+
+func containedPath(root, name string) (string, error) {
+	if strings.TrimSpace(name) == "" || filepath.IsAbs(name) {
+		return "", fmt.Errorf("path must be relative and non-blank")
+	}
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return "", err
+	}
+	candidate := filepath.Join(rootAbs, filepath.Clean(name))
+	rel, err := filepath.Rel(rootAbs, candidate)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) || filepath.IsAbs(rel) {
+		return "", fmt.Errorf("path escapes root")
+	}
+	rootResolved, err := filepath.EvalSymlinks(rootAbs)
+	if err != nil {
+		return "", err
+	}
+	candidateResolved, err := filepath.EvalSymlinks(candidate)
+	if err != nil {
+		return "", err
+	}
+	rel, err = filepath.Rel(rootResolved, candidateResolved)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) || filepath.IsAbs(rel) {
+		return "", fmt.Errorf("resolved path escapes root")
+	}
+	return candidateResolved, nil
 }
 
 func List(root string) ([]CatalogEntry, error) {

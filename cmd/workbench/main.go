@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/jonathanselby/enterprise-ai-workbench/internal/workbench"
@@ -14,7 +14,6 @@ import (
 const version = "0.1.0"
 
 func main() { os.Exit(run(os.Args[1:])) }
-
 func run(args []string) int {
 	if len(args) == 0 {
 		usage()
@@ -40,7 +39,6 @@ func run(args []string) int {
 		return 2
 	}
 }
-
 func listCmd(args []string) int {
 	fs := flag.NewFlagSet("list", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
@@ -54,7 +52,6 @@ func listCmd(args []string) int {
 	}
 	return printJSON(entries)
 }
-
 func validateCmd(args []string) int {
 	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
@@ -69,7 +66,6 @@ func validateCmd(args []string) int {
 	}
 	return 0
 }
-
 func renderCmd(args []string) int {
 	fs := flag.NewFlagSet("render", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
@@ -105,7 +101,6 @@ func renderCmd(args []string) int {
 	}
 	return 0
 }
-
 func checkCmd(args []string) int {
 	fs := flag.NewFlagSet("check", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
@@ -134,7 +129,6 @@ func checkCmd(args []string) int {
 	}
 	return 0
 }
-
 func reviewCmd(args []string) int {
 	fs := flag.NewFlagSet("review", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
@@ -166,7 +160,7 @@ func reviewCmd(args []string) int {
 	}
 	record, err := workbench.Review(wf, input, output, *decision, *reviewer, *reason, time.Now())
 	if err != nil {
-		if strings.Contains(err.Error(), "cannot accept output") {
+		if errors.Is(err, workbench.ErrOutputContract) {
 			fmt.Fprintln(os.Stderr, err)
 			return 1
 		}
@@ -174,7 +168,6 @@ func reviewCmd(args []string) int {
 	}
 	return printJSON(record)
 }
-
 func printJSON(v any) int {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
@@ -184,9 +177,7 @@ func printJSON(v any) int {
 	}
 	return 0
 }
-
 func executionError(err error) int { fmt.Fprintln(os.Stderr, err); return 3 }
-
 func usage() {
 	fmt.Fprintln(os.Stderr, "usage: workbench <version|list|validate|render|check|review> [options]")
 }
